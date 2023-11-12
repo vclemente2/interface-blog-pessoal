@@ -9,11 +9,14 @@ const AppRouter = () => {
   return (
     <BrowserRouter>
       <Navbar />
-      <Routes>
-        <Route path="/cadastro" Component={Cadastro}></Route>
-        <Route path="/login" Component={Login}></Route>
-        <Route path="/home" Component={Home}></Route>
-      </Routes>
+      <div className="min-h-[80vh]">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/cadastro" element={<Cadastro />} />
+        </Routes>
+      </div>
       <Footer />
     </BrowserRouter>
   );
