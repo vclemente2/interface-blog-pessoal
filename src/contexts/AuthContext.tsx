@@ -19,7 +19,8 @@ export const AuthContext = createContext({} as AuthContextProps);
 export function AuthProvider({ children }: AuthProviderProps) {
   const [usuario, setUsuario] = useState<UsuarioLogin>({
     email: "",
-    password: ""
+    password: "",
+    token: ""
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +41,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   function handleLogout() {
     setUsuario({
       email: "",
-      password: ""
+      password: "",
+      token: ""
     });
   }
 
