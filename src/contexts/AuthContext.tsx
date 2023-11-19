@@ -1,13 +1,16 @@
 import { createContext, ReactNode, useState } from "react";
 
 import UsuarioLogin from "../models/usuario/UsuarioLogin";
-import { login } from "../services/Service";
+import { buscar, login } from "../services/Service";
+import Usuario from "../models/usuario/Usuario";
 
 interface AuthContextProps {
   usuario: UsuarioLogin;
   handleLogout(): void;
   handleLogin(usuario: UsuarioLogin): Promise<void>;
   isLoading: boolean;
+  usuarioData: Usuario;
+  buscarUsuarioLogadoPorEmail(email: string): Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -23,7 +26,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     token: ""
   });
 
+  const [usuarioData, setUsuarioData] = useState<Usuario>({} as Usuario);
+
   const [isLoading, setIsLoading] = useState(false);
+
+  async function buscarUsuarioLogadoPorEmail(email: string) {
+    await buscar(`/usuarios/email/${email}`, setUsuarioData, {
+      headers: {
+        Authorization: usuario.token
+      }
+    });
+  }
 
   async function handleLogin(userLogin: UsuarioLogin) {
     setIsLoading(true);
@@ -48,7 +61,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return (
     <AuthContext.Provider
-      value={{ usuario, handleLogin, handleLogout, isLoading }}
+      value={{
+        usuario,
+        usuarioData,
+        buscarUsuarioLogadoPorEmail,
+        handleLogin,
+        handleLogout,
+        isLoading
+      }}
     >
       {children}
     </AuthContext.Provider>
