@@ -1,26 +1,30 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.scss";
-import { useContext } from "react";
+import { ReactNode, useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
+import { toastAlerta } from "../../utils/toastAlerta";
 
 function Navbar() {
   const navigate = useNavigate();
-  const { handleLogout } = useContext(AuthContext);
+  const { usuario, handleLogout } = useContext(AuthContext);
 
   function logout() {
     handleLogout();
-    alert("Usuário deslogado com sucesso");
+    toastAlerta("Usuário deslogado com sucesso", "info");
     navigate("/login");
   }
 
-  return (
-    <>
+  let component: ReactNode;
+
+  if (usuario.token !== "") {
+    component = (
       <div
         className="w-full bg-indigo-900 text-white
-                flex justify-center py-4"
+            flex justify-center py-4"
       >
         <div className="container flex justify-between text-lg">
-          Blog Pessoal
+          <Link to="/home">Blog Pessoal</Link>
+
           <div className="flex gap-4">
             <ul className="flex gap-4">
               <li className="menuLink">
@@ -44,8 +48,10 @@ function Navbar() {
           </div>
         </div>
       </div>
-    </>
-  );
+    );
+  }
+
+  return <>{component}</>;
 }
 
 export default Navbar;
